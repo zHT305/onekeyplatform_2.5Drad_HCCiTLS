@@ -1,0 +1,134 @@
+# ----------------------------------------------------------------------- #
+#                                                                         #
+#                               YMAL文件语法                               #
+#                       http://medai.icu/thread/677                       #
+#                                                                         #
+# ----------------------------------------------------------------------- #
+
+### ------------------------ 深度学习任务配置 ------------------------ ###
+# 使用Step0生成的数据划分的数据，在split_info文件夹
+train_file: split_info/train-RND-2.txt
+val_file: split_info/val-RND-2.txt
+# 你选择的模型名称
+# | **模型系列** | **模型名称**                                                   |
+# | ------------ | ------------------------------------------------------------ |
+# | AlexNet      | alexnet                                                      |
+# | VGG          | vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19_bn, vgg19 |
+# | ResNet       | resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, resnext101_32x8d, wide_resnet50_2, wide_resnet101_2 |
+# | DenseNet     | densenet121, densenet169, densenet201, densenet161           |
+# | Inception    | googlenet, inception_v3                                      |
+# | SqueezeNet   | squeezenet1_0, squeezenet1_1                                 |
+# | ShuffleNetV2 | shufflenet_v2_x2_0, shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5 |
+# | MobileNet    | mobilenet_v2, mobilenet_v3_large, mobilenet_v3_small         |
+# | MNASNet      | mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3              |
+# | ViT          | ViT, SimpleViT, Crossformer, TwinsSVT|
+# 这个不用动，模型存放的位置
+sel_model_name: resnet18
+model_root: dl_models
+epoch: 50
+sel_epoch: ''
+# 自己数据存放的目录。一般是由OKT-crop_max_ro工具生成。
+data_pattern: H:\TLS\TLS_yzx\crop_AV_10npy
+in_channels: 10
+model_names:
+  - resnet18
+  - resnet34
+  - resnet152
+radio_dir: H:\TLS\TLS_yzx\VP
+task_column: label
+dataset_column: group
+# label文件位置，注意这里需要是多中心的配置，包括group信息。
+label_file: split_info\label-RND-0.csv
+
+# 是否使用分形维数特征，默认是False，当ROI比较小或者是单层(超声数据)的时候会导致计算失败。
+with_fd: false
+# 是否使用拓扑组学特征，默认是False
+with_toplogy: false
+# 是否使用hessian矩阵特征，默认是False
+with_hessian: false
+# 提取传统组学特征的配置文件param_file参数设置，在custom_settings文件夹里面按需选择
+extractor_settings: E:\database_all\OnekeyPlatform\onekey_comp\comp9-Solutions\sol37.
+  2.5D 多通道深度（迁移）学习-单（多）中心-组学特征-融合-临床\custom_settings\exampleCT.yaml
+# 是否使用SMOTE，解决样本不均衡的问题。
+use_smote: false
+# 使用MRMR模型筛选特征, 不输入数据的时候，不使用mRMR，默认不使用, 特征多的时候在考虑，Lasso的图如果有多幅，就不要用了。
+mrmr_sel_feature_num: '18'
+# 你打算使用什么机器学习算法建模，先全选然后挑几个好的~，最后保留3-5个。
+ml_models:
+  - LR
+  - SVM
+  - KNN
+  - RandomForest
+  - ExtraTrees
+  - XGBoost
+  - LightGBM
+  - MLP
+combined_feature_file: E:\database_all\OnekeyPlatform\onekey_comp\comp9-Solutions\sol37.
+  2.5D 多通道深度（迁移）学习-单（多）中心-组学特征-融合-临床\features\rad_25dl_features.csv
+dl_feature_file: features\compress_features.csv
+rad_feature_file: features/rad_features.csv
+
+### ------------------------ 临床任务配置 ------------------------ ###
+clinic_file: H:\TLS\yzx_sl_clinical.csv
+# 用于做临床特征筛选的pvalue
+p_value: 0.1
+
+### ------------------------ 汇总任务配置 ------------------------ ###
+# 对比不同算法
+compare_algos: [Radiomics_LR, DeepLearning_resnet101, Radiomics_RandomForest]
+compare_models: [Radiomics, DeepLearning]
+# 汇总的模型
+summary_models:
+  - Clinic
+  - Radiomics
+  - DeepLearning
+  - Combined
+fusion_models:
+  - Radiomics
+  - DeepLearning
+sel_model:
+  Clinic: ExTraTrees
+  DeepLearning: resnet101
+  Radiomics: SVM
+subsets:
+  - train
+  - val
+  - test
+DISABLE_VIDEO: true
+PAPER_TMP: RadiomicsDL
+
+# DPI，一般不用动
+figure.dpi: 300
+# 画布大小，一般也不用动
+figure.figsize: [10, 8]
+# 字体大小，
+font.size: 16
+# 显示精度，保留记为小数。
+display.precision: 3
+# 线宽，直线相关的，ROC，Lasso，MSE
+display.linewidth: 4
+# 线的类型，实线，虚线，点虚线。
+display.linestyle: ['-', ':', --, -.]
+# 目前支持的色系：
+# Accent, Accent_r, Blues, Blues_r, BrBG, BrBG_r, BuGn, BuGn_r, BuPu, BuPu_r, 
+# CMRmap, CMRmap_r, Dark2, Dark2_r, GnBu, GnBu_r, Greens, Greens_r, Greys, 
+# Greys_r, OrRd, OrRd_r, Oranges, Oranges_r, PRGn, PRGn_r, Paired, Paired_r, 
+# Pastel1, Pastel1_r, Pastel2, Pastel2_r, PiYG, PiYG_r, PuBu, PuBuGn, PuBuGn_r, PuBu_r, 
+# PuOr, PuOr_r, PuRd, PuRd_r, Purples, Purples_r, RdBu, RdBu_r, RdGy, RdGy_r, RdPu, 
+# RdPu_r, RdYlBu, RdYlBu_r, RdYlGn, RdYlGn_r, Reds, Reds_r, Set1, Set1_r, Set2, Set2_r, 
+# Set3, Set3_r, Spectral, Spectral_r, Wistia, Wistia_r, YlGn, YlGnBu, YlGnBu_r, YlGn_r, 
+# YlOrBr, YlOrBr_r, YlOrRd, YlOrRd_r, afmhot, afmhot_r, autumn, autumn_r, binary, binary_r, 
+# bone, bone_r, brg, brg_r, bwr, bwr_r, cividis, cividis_r, cool, cool_r, coolwarm, coolwarm_r, 
+# copper, copper_r, crest, crest_r, cubehelix, cubehelix_r, flag, flag_r, flare, flare_r, 
+# gist_earth, gist_earth_r, gist_gray, gist_gray_r, gist_heat, gist_heat_r, gist_ncar, 
+# gist_ncar_r, gist_rainbow, gist_rainbow_r, gist_stern, gist_stern_r, gist_yarg, gist_yarg_r, 
+# gnuplot, gnuplot2, gnuplot2_r, gnuplot_r, gray, gray_r, hot, hot_r, hsv, hsv_r, icefire, icefire_r, 
+# inferno, inferno_r, jet_r, magma, magma_r, mako, mako_r, nipy_spectral, nipy_spectral_r, 
+# ocean, ocean_r, pink, pink_r, plasma, plasma_r, prism, prism_r, rainbow, rainbow_r, rocket, 
+# rocket_r, seismic, seismic_r, spring, spring_r, summer, summer_r, tab10, tab10_r, tab20, tab20_r, 
+# tab20b, tab20b_r, tab20c, tab20c_r, terrain, terrain_r, twilight, twilight_r, twilight_shifted, 
+# twilight_shifted_r, viridis, viridis_r, vlag, vlag_r, winter, winter_r
+# 你也可以自己定义16进制的色彩图
+# display.colors: ['#1021F8', '#CE3E3A', '#60D830', '#1FE99C', '#E46424']
+display.colors: Set1
+optimizer: sgd

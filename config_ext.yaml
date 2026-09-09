@@ -1,0 +1,210 @@
+config.title: 'sol37. 2.5D 多通道深度（迁移）学习-单（多）中心-组学特征-融合-临床'
+config.data_run:
+  - Step1.1. 深度学习模型训练.ipynb
+  - Step1.2. 特征深度学习提取.ipynb
+  - Step2.1. 模型可视化-Grad-CAM.ipynb
+  - Step3. 传统组学建模.ipynb
+  - Step4. 传统组学+深度学习建模.ipynb
+  - Step5.1. 临床基线统计分析.ipynb
+  - Step5.2. Clinical.ipynb
+# -------------------------- 结果汇总配置 --------------------------------#
+# 需要汇总的步骤列表
+config.data_summary:
+  - Step6.1. 深度学习模型效能评估.ipynb
+  - Step6.2 算法模型对比.ipynb
+  - Step6.3 指标-Signature对比.ipynb
+  - Step6.4 指标汇总-Nomogram.ipynb
+# value_type: str 是默认值，所以就不写了
+# tune_params：是手动设置的调参参数，后面会根据这个进行组合
+# fromPreStep：表示这个参数是从上一步的输出中获取的，不需要手动设置。如果没有设置，则从 items 里面挑选一个
+
+train_file.title: 深度学习任务训练集划分文件（Step0 生成，位于 split_info）
+train_file.value_type: file
+train_file.value: split_info/train-RND-0.txt
+train_file.input_type: input
+
+val_file.title: 深度学习任务验证集划分文件（Step0 生成，位于 split_info）
+val_file.value_type: file
+val_file.value: split_info/val-RND-0.txt
+val_file.input_type: input
+
+data_pattern.title: 深度学习图像数据目录（一般由 OKT-crop_max_ro 工具生成）
+data_pattern.value_type: dir
+data_pattern.value: C:\Users\onekey\Desktop\demo\crop_en5
+data_pattern.dir_file_check_type: require
+
+model_names.title: 深度学习任务使用的模型名称
+model_names.value: [resnet101]
+model_names.input_type: multi_choice
+model_names.items: [alexnet, vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, vgg19_bn, resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, resnext101_32x8d, wide_resnet50_2, wide_resnet101_2, densenet121, densenet169, densenet201, densenet161, googlenet, inception_v3, squeezenet1_0, squeezenet1_1, shufflenet_v2_x2_0, shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5, mobilenet_v2, mobilenet_v3_large, mobilenet_v3_small, mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3, ViT, SimpleViT, Crossformer, TwinsSVT]
+
+sel_model_name.title: 选择那个深度学习模型做为最终的2.5D深度学习模型结果
+sel_model_name.value: 
+sel_model_name.input_type: single_choice
+sel_model_name.items: [alexnet, vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, vgg19_bn, resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, resnext101_32x8d, wide_resnet50_2, wide_resnet101_2, densenet121, densenet169, densenet201, densenet161, googlenet, inception_v3, squeezenet1_0, squeezenet1_1, shufflenet_v2_x2_0, shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5, mobilenet_v2, mobilenet_v3_large, mobilenet_v3_small, mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3, ViT, SimpleViT, Crossformer, TwinsSVT]
+
+model_root.title: 深度学习模型保存目录
+model_root.value_type: dir
+model_root.value: dl_models
+
+in_channels.title: 输入的通道数
+in_channels.value_type: int
+in_channels.value: 3
+in_channels.input_type: input
+
+epoch.title: 深度学习训练轮次（Epoch）
+epoch.value_type: int
+epoch.value: 3
+epoch.input_type: input
+
+radio_dir.title: 传统组学影像数据目录（目录下必须包含 images 和 masks 文件夹）
+radio_dir.value_type: dir
+radio_dir.value: C:\Users\onekey\Desktop\demo
+radio_dir.dir_file_check_type: require
+
+clinic_file.title: 临床数据文件位置（临床任务配置）
+clinic_file.value_type: file
+clinic_file.value: C:\Users\onekey\Desktop\demo\Clinical.csv
+clinic_file.dir_file_check_type: require
+
+task_column.title: 任务标签列名
+task_column.value: label
+task_column.input_type: input
+
+label_file.title: 多中心标签文件位置（必须包含 group 分组信息）,与深度学习任务训练集划分文件下标保持一致
+label_file.value_type: file
+label_file.value: split_info\label-RND-0.csv
+label_file.input_type: input
+
+dataset_column.title: 标签文件中的数据集分组列名（如 group）
+dataset_column.value: group
+dataset_column.input_type: input
+
+extractor_settings.title: 传统组学特征提取配置文件位置
+extractor_settings.value_type: file
+extractor_settings.value:
+
+mrmr_sel_feature_num.title: 传统组学特征使用 MRMR 筛选时的特征数量
+mrmr_sel_feature_num.value:
+mrmr_sel_feature_num.input_type: input
+
+ml_models.title: 传统组学/融合建模阶段使用的机器学习算法
+ml_models.value: [LR, SVM, KNN, RandomForest, ExtraTrees, XGBoost, LightGBM, MLP]
+ml_models.input_type: multi_choice
+ml_models.items: [LR, SVM, KNN, RandomForest, ExtraTrees, XGBoost, LightGBM, MLP]
+
+combined_feature_file.title: 传统组学 + 深度学习手工拼接后的融合特征文件
+combined_feature_file.value_type: file
+combined_feature_file.value:
+combined_feature_file.input_type: input
+
+dl_feature_file.title: 深度学习压缩特征文件,可以根据深度学习的特征进行调整
+dl_feature_file.value_type: file
+dl_feature_file.value: features\resnet101_compress_features.csv
+dl_feature_file.input_type: input
+
+rad_feature_file.title: 传统组学特征文件（Radiomics）,根据传统组学特征调整
+rad_feature_file.value_type: file
+rad_feature_file.value: features/rad_features.csv
+rad_feature_file.input_type: input
+
+p_value.title: 临床特征筛选使用的 p 值阈值
+p_value.value_type: float
+p_value.value: 0.05
+p_value.input_type: input
+
+summary_models.title: ROC、校准、DCA、Delong 汇总对比的模型
+summary_models.value: [Clinic, Rad, DTL, DLR]
+summary_models.input_type: multi_choice
+summary_models.items: [Clinic, Rad, DTL, DLR]
+summary_models.usage: summary
+summary_models.add_extra: true
+
+fusion_models.title: 与临床特征融合以生成最终 Nomogram 的模型
+fusion_models.value: [DLR]
+fusion_models.input_type: multi_choice
+fusion_models.items: [DLR]
+fusion_models.usage: summary
+fusion_models.add_extra: true
+
+
+sel_epoch.title: 与临床特征融合以生成最终 Nomogram 的模型
+sel_epoch.value_type: int
+sel_epoch.value: 
+sel_epoch.input_type: input
+sel_epoch.usage: summary
+sel_epoch.add_extra: true
+
+sel_model.title: 各个汇总模型对应选用的具体算法/模型
+sel_model.value:
+sel_model.input_type: single_choice
+sel_model.items: [LR, SVM, KNN, RandomForest, ExtraTrees, XGBoost, LightGBM, MLP, resnet101]
+sel_model.from_pre_step_items: [Clinic, Rad, DTL, DLR]
+sel_model.usage: summary
+sel_model.add_extra: true
+
+subsets.title: 指标汇总使用的数据集分组（需与 label_file 中的 group 一致）
+subsets.value: [train, val, test]
+subsets.input_type: multi_choice
+subsets.items: [train, val, test]
+
+
+# -------------------------- 【组学】gridsearch的参数设置 --------------------------------#
+# 树模型：max_depth，n_estimators，min_samples_split参数
+# 线性模型（LR、SVM）： max_iter
+max_depth.title: 树模型中，max_depth参数
+max_depth.value_type: int
+max_depth.value: 
+max_depth.input_type: input
+max_depth.tune_params: [10]
+
+
+n_estimators.title: 树模型中，n_estimators参数
+n_estimators.value_type: int
+n_estimators.value: 
+n_estimators.input_type: input
+n_estimators.tune_params: [3]
+
+
+min_samples_split.title: 树模型中，min_samples_split参数
+min_samples_split.value_type: int
+min_samples_split.value: 
+min_samples_split.input_type: input
+min_samples_split.tune_params: [2]
+
+
+max_iter.title: 线性模型中，max_iter参数。
+max_iter.value_type: int
+max_iter.value: 
+max_iter.input_type: input
+max_iter.tune_params: [300]
+
+
+# -------------------------- 【深度学习】gridsearch的参数设置 --------------------------------#
+# rand_index, 使用按个随机分组的数据
+rand_index.title: 使用按个随机分组的，此参数优先级最高。
+rand_index.value_type: int
+rand_index.value: 
+rand_index.input_type: input
+rand_index.tune_params: [0]
+
+# batch_size
+batch_size.title: batch_size
+batch_size.value_type: int
+batch_size.value: 
+batch_size.input_type: input
+batch_size.tune_params: [32]
+
+# init_lr
+init_lr.title: init_lr
+init_lr.value_type: float
+init_lr.value: 
+init_lr.input_type: input
+init_lr.tune_params: [0.01]
+
+# optimizer
+optimizer.title: optimizer
+optimizer.value: sgd
+optimizer.tune_params: [sgd]
+optimizer.input_type: single_choice
+optimizer.items: [ASGD, Adadelta, Adagrad, Adam, Adamax, LBFGS, Optimizer, RMSprop, Rprop, sgd, SparseAdam]
